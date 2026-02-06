@@ -1,0 +1,412 @@
+/* Device Output Switcher - UI Styles */
+
+/* Main card container */
+.device-output-card {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 2147483647; /* Maximum 32-bit signed integer */
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+  overflow: visible;
+  transition: all 0.3s ease;
+  font-size: 12px;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .device-output-card {
+    background: #2d2d2d;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  }
+}
+
+/* Collapsed state */
+.device-output-card.collapsed .device-output-card-content {
+  display: none;
+}
+
+.device-output-card.collapsed {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  padding: 0;
+}
+
+/* Hide the toggle button when collapsed */
+.device-output-card.collapsed .device-output-toggle {
+  display: none;
+}
+
+/* Ensure settings button fills the collapsed card */
+.device-output-card.collapsed .device-output-settings-btn {
+  width: 100%;
+  height: 100%;
+}
+
+/* Toggle button - now positioned in top left corner */
+.device-output-toggle {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 20px;
+  height: 20px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+  padding: 0;
+  z-index: 0;
+}
+
+.device-output-toggle:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+@media (prefers-color-scheme: dark) {
+  .device-output-toggle:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+}
+
+/* Toggle icon rotation */
+.device-output-toggle .toggle-icon {
+  transition: transform 0.3s ease;
+}
+
+.device-output-card.collapsed .device-output-toggle .toggle-icon {
+  transform: rotate(180deg);
+}
+
+/* Card content */
+.device-output-card-content {
+  padding: 6px 6px 6px 6px;
+  padding-top: 40px;
+}
+
+
+/* Device buttons container */
+.device-output-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Device button */
+.device-output-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  background: transparent;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  color: #333;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+@media (prefers-color-scheme: dark) {
+  .device-output-button {
+    border-color: #444;
+    color: #f0f0f0;
+  }
+}
+
+.device-output-button:hover {
+  border-color: #999;
+  background: rgba(0, 0, 0, 0.03);
+}
+
+@media (prefers-color-scheme: dark) {
+  .device-output-button:hover {
+    border-color: #666;
+    background: rgba(255, 255, 255, 0.05);
+  }
+}
+
+/* Active state */
+.device-output-button.active {
+  border-color: #4285f4;
+  background: rgba(66, 133, 244, 0.1);
+  color: #4285f4;
+}
+
+@media (prefers-color-scheme: dark) {
+  .device-output-button.active {
+    background: rgba(66, 133, 244, 0.2);
+    color: #6eb1ff;
+  }
+}
+
+/* Button emoji */
+.device-output-button .emoji {
+  font-size: 14px;
+  line-height: 1;
+}
+
+/* Button label */
+.device-output-button .label {
+  flex: 1;
+}
+
+/* Error message */
+.device-output-error {
+  margin-top: 12px;
+  padding: 10px 12px;
+  background: #fee;
+  border: 1px solid #fcc;
+  border-radius: 6px;
+  font-size: 12px;
+  color: #c33;
+  display: none;
+}
+
+.device-output-error.visible {
+  display: block;
+}
+
+@media (prefers-color-scheme: dark) {
+  .device-output-error {
+    background: rgba(204, 51, 51, 0.2);
+    border-color: rgba(255, 68, 68, 0.3);
+    color: #ff6b6b;
+  }
+}
+
+/* Settings button - now circular collapse button positioned on right */
+.device-output-settings-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  border-radius: 50%;
+  transition: background 0.2s ease;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 2;
+}
+
+.device-output-settings-btn:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+@media (prefers-color-scheme: dark) {
+  .device-output-settings-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+}
+
+/* Settings panel */
+.device-output-settings {
+  display: none;
+  margin-top: 4px;
+  padding-top: 4px;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+@media (prefers-color-scheme: dark) {
+  .device-output-settings {
+    border-top-color: rgba(255, 255, 255, 0.1);
+  }
+}
+
+.device-output-settings.open {
+  display: block;
+}
+
+/* Settings input */
+.device-output-settings-input {
+  width: 100%;
+  padding: 4px 8px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  font-size: 12px;
+  font-family: inherit;
+  box-sizing: border-box;
+  margin-bottom: 4px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .device-output-settings-input {
+    background: #1a1a1a;
+    border-color: #444;
+    color: #f0f0f0;
+  }
+}
+
+.device-output-settings-input:focus {
+  outline: none;
+  border-color: #4285f4;
+}
+
+.device-output-settings-input::placeholder {
+  color: #999;
+}
+
+@media (prefers-color-scheme: dark) {
+  .device-output-settings-input::placeholder {
+    color: #666;
+  }
+}
+
+/* Settings actions */
+.device-output-settings-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.device-output-settings-btn-action {
+  flex: 1;
+  padding: 4px 8px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  background: transparent;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 500;
+  color: #333;
+  transition: all 0.2s ease;
+}
+
+@media (prefers-color-scheme: dark) {
+  .device-output-settings-btn-action {
+    border-color: #444;
+    color: #f0f0f0;
+  }
+}
+
+.device-output-settings-btn-action:hover {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+@media (prefers-color-scheme: dark) {
+  .device-output-settings-btn-action:hover {
+    background: rgba(255, 255, 255, 0.05);
+  }
+}
+
+.device-output-settings-btn-action.primary {
+  background: #4285f4;
+  border-color: #4285f4;
+  color: #fff;
+}
+
+.device-output-settings-btn-action.primary:hover {
+  background: #3367d6;
+}
+
+/* Whitelist display */
+.device-output-whitelist {
+  margin-top: 4px;
+  display: none;
+}
+
+.device-output-whitelist.has-domains {
+  display: block;
+}
+
+.device-output-whitelist-label {
+  font-size: 10px;
+  color: #666;
+  margin-bottom: 2px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .device-output-whitelist-label {
+    color: #999;
+  }
+}
+
+.device-output-whitelist-domains {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+}
+
+.device-output-whitelist-domain {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px 4px;
+  background: #f0f0f0;
+  border-radius: 3px;
+  font-size: 10px;
+  color: #333;
+}
+
+@media (prefers-color-scheme: dark) {
+  .device-output-whitelist-domain {
+    background: #3a3a3a;
+    color: #f0f0f0;
+  }
+}
+
+.device-output-whitelist-domain-remove {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  width: 12px;
+  height: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  color: #999;
+  border-radius: 2px;
+}
+
+.device-output-whitelist-domain-remove:hover {
+  background: rgba(0, 0, 0, 0.1);
+  color: #333;
+}
+
+@media (prefers-color-scheme: dark) {
+  .device-output-whitelist-domain-remove:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .device-output-card {
+    top: 10px;
+    right: 10px;
+    left: 10px;
+  }
+
+  .device-output-buttons {
+    flex-direction: row;
+  }
+
+  .device-output-button {
+    flex: 1;
+    flex-direction: column;
+    padding: 6px 4px;
+    gap: 4px;
+    text-align: center;
+    font-size: 11px;
+  }
+
+  .device-output-button .emoji {
+    font-size: 16px;
+  }
+}
