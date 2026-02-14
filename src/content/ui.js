@@ -5,15 +5,15 @@ const ERROR_HIDE_DELAY_MS = 5000;
 
 const DEVICE_CONFIG = {
   desktop: {
-    emoji: '🖥️',
+    icon: 'monitor',
     label: 'D',
   },
   mobile: {
-    emoji: '📱',
+    icon: 'smartphone',
     label: 'M',
   },
   app: {
-    emoji: '⚙️',
+    icon: 'layers',
     label: 'A',
   },
 };
@@ -29,16 +29,16 @@ function createCard() {
   // Circular button - expands/collapses the card
   const toggle = document.createElement('button');
   toggle.className = 'device-output-settings-btn';
-  toggle.innerHTML = '⚙️';
+  toggle.innerHTML = '<i data-lucide="settings"></i>';
   toggle.setAttribute('aria-label', 'Toggle device switcher');
   toggle.id = 'device-output-settings-btn';
   toggle.onclick = () => toggleCard(card);
 
-  // Settings button (top right corner) - opens settings panel
+  // Settings button (top right corner) - opens whitelist panel
   const settingsBtn = document.createElement('button');
   settingsBtn.className = 'device-output-toggle';
-  settingsBtn.innerHTML = '<span class="toggle-icon">⚙️</span>';
-  settingsBtn.setAttribute('aria-label', 'Settings');
+  settingsBtn.innerHTML = '<i data-lucide="shield" class="toggle-icon"></i>';
+  settingsBtn.setAttribute('aria-label', 'Whitelist');
   settingsBtn.onclick = () => toggleSettings();
 
   // Card content
@@ -84,15 +84,15 @@ function createDeviceButton(deviceType, config) {
   button.dataset.deviceType = deviceType;
   button.setAttribute('aria-label', `Switch to ${config.label} mode`);
 
-  const emoji = document.createElement('span');
-  emoji.className = 'emoji';
-  emoji.textContent = config.emoji;
+  const icon = document.createElement('i');
+  icon.className = 'icon';
+  icon.setAttribute('data-lucide', config.icon);
 
   const label = document.createElement('span');
   label.className = 'label';
   label.textContent = config.label;
 
-  button.appendChild(emoji);
+  button.appendChild(icon);
   button.appendChild(label);
 
   return button;
@@ -233,6 +233,11 @@ function showCard() {
 
   const card = createCard();
   document.body.appendChild(card);
+
+  // Initialize Lucide icons
+  if (typeof lucide !== 'undefined') {
+    lucide.createIcons();
+  }
 }
 
 /**

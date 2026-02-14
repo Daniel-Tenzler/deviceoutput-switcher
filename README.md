@@ -37,6 +37,29 @@ To manage the whitelist of domains where the extension activates:
 2. Add or remove domains from the list
 3. Changes take effect immediately
 
+## Usage
+
+1. Navigate to a website where you want to switch device modes
+2. Click the floating card that appears
+3. Click a device type button (Desktop, Mobile, or App)
+4. The page will reload with the new device cookies set
+
+To manage the whitelist of domains where the extension activates:
+
+1. Click the settings icon on the floating card
+2. Add or remove domains from the list
+3. Changes take effect immediately
+
+## UI Design
+
+The extension features a professional icon redesign using [Lucide Icons](https://lucide.dev/), a consistent and accessible icon library. The floating UI card displays device mode buttons with clear visual indicators and a settings menu for domain management.
+
+## License
+
+This project is licensed under the MIT-style license (see [LICENSE](LICENSE) file).
+
+It includes [Lucide Icons](https://lucide.dev/) v0.564.0, which is licensed under the ISC license. See the [Lucide repository](https://github.com/lucide-icons/lucide) for details.
+
 ## Architecture
 
 ```

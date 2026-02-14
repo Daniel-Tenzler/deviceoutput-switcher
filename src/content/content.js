@@ -16,10 +16,31 @@
   const RELOAD_DELAY_MS = 100;
 
   /**
+   * Remove device-related URL parameters from the current URL
+   */
+  function removeDeviceParamsFromUrl() {
+    const url = new URL(window.location.href);
+    const params = url.searchParams;
+
+    // Remove deviceoutput and devicetype parameters regardless of value
+    params.delete('deviceoutput');
+    params.delete('devicetype');
+
+    // Update URL without triggering a page reload
+    const newUrl = url.toString();
+    if (newUrl !== window.location.href) {
+      window.history.replaceState({}, '', newUrl);
+    }
+  }
+
+  /**
    * Handle device type change
    */
   async function handleDeviceChange(deviceType) {
     try {
+      // Remove device-related URL parameters before setting cookies
+      removeDeviceParamsFromUrl();
+
       // Set the cookies
       await setDeviceType(deviceType);
 

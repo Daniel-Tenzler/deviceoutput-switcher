@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Device Output Switcher",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Switch between device output modes (Desktop, Mobile, App) by managing cookies",
   "permissions": [
     "activeTab",
@@ -19,6 +19,7 @@
     {
       "matches": ["<all_urls>"],
       "js": [
+        "src/content/lucide.js",
         "src/shared/constants.js",
         "src/content/cookie-manager.js",
         "src/content/storage-manager.js",
