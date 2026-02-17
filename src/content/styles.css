@@ -407,28 +407,24 @@
   }
 }
 
-/* Responsive adjustments */
+/* Responsive adjustments - keep compact like desktop */
 @media (max-width: 480px) {
   .device-output-card {
     top: 10px;
     right: 10px;
-    left: 10px;
-  }
-
-  .device-output-buttons {
-    flex-direction: row;
   }
 
   .device-output-button {
-    flex: 1;
-    flex-direction: column;
-    padding: 4px 3px;
-    gap: 3px;
-    text-align: center;
-    font-size: 11px;
+    padding: 3px 6px;
+    font-size: 10px;
   }
 
   .device-output-button .icon {
-    font-size: 14px;
+    width: 12px;
+    height: 12px;
+  }
+
+  .device-output-button .label {
+    font-size: 10px;
   }
 }

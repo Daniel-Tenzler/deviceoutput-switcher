@@ -34,12 +34,70 @@
   }
 
   /**
+   * Detect device type from URL path
+   * @returns {string|null} - 'desktop', 'mobile', or null
+   */
+  function detectDeviceFromUrl() {
+    const pathname = window.location.pathname;
+
+    if (pathname.includes('/desktop/')) {
+      return 'desktop';
+    }
+    if (pathname.includes('/mobile/')) {
+      return 'mobile';
+    }
+    return null;
+  }
+
+  /**
+   * Get the target device type for URL path updates
+   * Treats 'app' as 'mobile' since we never want /app/ URLs
+   * @param {string} deviceType - The selected device type
+   * @returns {string} - The actual device type to use for URL ('desktop' or 'mobile')
+   */
+  function getTargetDeviceForUrl(deviceType) {
+    // We never want to navigate to /app/, so treat 'app' as 'mobile'
+    return deviceType === 'app' ? 'mobile' : deviceType;
+  }
+
+  /**
+   * Update URL path to match the new device type
+   * Replaces /desktop/ with /mobile/ or vice versa
+   * @param {string} newDeviceType - The target device type
+   * @returns {boolean} - True if URL was updated, false otherwise
+   */
+  function updateUrlPathForDevice(newDeviceType) {
+    const currentDeviceInUrl = detectDeviceFromUrl();
+    const targetDevice = getTargetDeviceForUrl(newDeviceType);
+
+    // If no device path in URL, or already on target device, no change needed
+    if (!currentDeviceInUrl || currentDeviceInUrl === targetDevice) {
+      return false;
+    }
+
+    const url = new URL(window.location.href);
+    const oldPathSegment = `/${currentDeviceInUrl}/`;
+    const newPathSegment = `/${targetDevice}/`;
+
+    // Replace the device path segment
+    url.pathname = url.pathname.replace(oldPathSegment, newPathSegment);
+
+    // Navigate to the new URL
+    window.location.href = url.toString();
+    return true;
+  }
+
+  /**
    * Handle device type change
    */
   async function handleDeviceChange(deviceType) {
     try {
       // Remove device-related URL parameters before setting cookies
       removeDeviceParamsFromUrl();
+
+      // Check if we need to update the URL path
+      const urlNeedsUpdate = detectDeviceFromUrl() !== null;
+      const targetDevice = getTargetDeviceForUrl(deviceType);
 
       // Set the cookies
       await setDeviceType(deviceType);
@@ -48,8 +106,14 @@
       updateActiveDevice(deviceType);
       hideError();
 
-      // Reload page to apply changes
-      setTimeout(() => location.reload(), RELOAD_DELAY_MS);
+      // Handle URL path update if needed
+      if (urlNeedsUpdate) {
+        // URL update will trigger navigation, so we don't need to reload
+        updateUrlPathForDevice(deviceType);
+      } else {
+        // Reload page to apply changes
+        setTimeout(() => location.reload(), RELOAD_DELAY_MS);
+      }
     } catch (error) {
       console.error('Failed to set device type:', error);
       showError(`Failed to switch to ${deviceType}: ${error.message}`);
