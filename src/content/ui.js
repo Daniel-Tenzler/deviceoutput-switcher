@@ -260,11 +260,6 @@ function makeCardDraggable(card) {
   card.addEventListener('pointerdown', (event) => {
     if (event.button !== 0) return;
 
-    const target = event.target;
-    if (target instanceof Element && target.closest('button, input, textarea, select')) {
-      return;
-    }
-
     const rect = card.getBoundingClientRect();
     pointerId = event.pointerId;
     startPointerX = event.clientX;

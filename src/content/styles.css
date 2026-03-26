@@ -11,7 +11,7 @@
   border-radius: 6px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
   overflow: visible;
-  transition: all 0.3s ease;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
   font-size: 11px;
   cursor: move;
   touch-action: none;
@@ -19,6 +19,7 @@
 
 .device-output-card.dragging {
   user-select: none;
+  transition: none;
 }
 
 /* Dark mode support */

@@ -14,6 +14,22 @@ const DEVICE_TYPES = {
 
 // Message timeout constant
 const MESSAGE_TIMEOUT_MS = 5000;
+const MESSAGE_RETRY_DELAY_MS = 150;
+const MAX_SEND_RETRIES = 2;
+
+function isReceivingEndError(error) {
+  return (
+    error
+    && typeof error.message === 'string'
+    && error.message.includes('Could not establish connection. Receiving end does not exist.')
+  );
+}
+
+function getDocumentCookieValue(name) {
+  const escapedName = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const match = document.cookie.match(new RegExp(`(?:^|; )${escapedName}=([^;]*)`));
+  return match ? decodeURIComponent(match[1]) : null;
+}
 
 /**
  * Send a message to the background script and wait for response
@@ -22,25 +38,52 @@ const MESSAGE_TIMEOUT_MS = 5000;
  * @returns {Promise} Resolves with response or rejects on error/timeout
  */
 async function sendMessageToBackground(message, timeout = MESSAGE_TIMEOUT_MS) {
-  return new Promise((resolve, reject) => {
-    const timer = setTimeout(() => {
-      reject(new Error(`Timeout waiting for response to ${message.type} after ${timeout}ms`));
-    }, timeout);
+  let attempts = 0;
 
-    chrome.runtime.sendMessage(message, (response) => {
-      clearTimeout(timer);
+  while (attempts <= MAX_SEND_RETRIES) {
+    try {
+      const response = await new Promise((resolve, reject) => {
+        const timer = setTimeout(() => {
+          reject(new Error(`Timeout waiting for response to ${message.type} after ${timeout}ms`));
+        }, timeout);
 
-      if (chrome.runtime.lastError) {
-        reject(new Error(`Chrome runtime error: ${chrome.runtime.lastError.message}`));
-      } else if (!response) {
-        reject(new Error('No response received from background script'));
-      } else if (response.success) {
-        resolve(response);
-      } else {
-        reject(new Error(response.error || `Operation ${message.type} failed`));
+        chrome.runtime.sendMessage(message, (result) => {
+          clearTimeout(timer);
+
+          if (chrome.runtime.lastError) {
+            reject(new Error(`Chrome runtime error: ${chrome.runtime.lastError.message}`));
+            return;
+          }
+
+          if (!result) {
+            reject(new Error('No response received from background script'));
+            return;
+          }
+
+          if (!result.success) {
+            reject(new Error(result.error || `Operation ${message.type} failed`));
+            return;
+          }
+
+          resolve(result);
+        });
+      });
+
+      return response;
+    } catch (error) {
+      const canRetry = isReceivingEndError(error) && attempts < MAX_SEND_RETRIES;
+      if (!canRetry) {
+        throw error;
       }
-    });
-  });
+
+      await new Promise((resolve) => {
+        setTimeout(resolve, MESSAGE_RETRY_DELAY_MS);
+      });
+      attempts += 1;
+    }
+  }
+
+  throw new Error(`Failed to send ${message.type} after retries`);
 }
 
 /**
@@ -74,6 +117,18 @@ async function getCurrentDevice() {
     }
     return null;
   } catch (error) {
+    if (isReceivingEndError(error)) {
+      const fallbackValue =
+        getDocumentCookieValue('deviceoutput')
+        || getDocumentCookieValue('devicetype');
+
+      if (Object.values(DEVICE_TYPES).includes(fallbackValue)) {
+        return fallbackValue;
+      }
+
+      return null;
+    }
+
     console.error('Error getting current device:', error);
     return null;
   }
