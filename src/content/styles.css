@@ -13,6 +13,12 @@
   overflow: visible;
   transition: all 0.3s ease;
   font-size: 11px;
+  cursor: move;
+  touch-action: none;
+}
+
+.device-output-card.dragging {
+  user-select: none;
 }
 
 /* Dark mode support */
@@ -44,6 +50,7 @@
 .device-output-card.collapsed .device-output-settings-btn {
   width: 100%;
   height: 100%;
+  cursor: move;
 }
 
 /* Toggle button - now positioned in top left corner */
